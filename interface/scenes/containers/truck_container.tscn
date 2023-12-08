@@ -1,0 +1,119 @@
+[gd_scene load_steps=2 format=3 uid="uid://c2nf87mytaeh4"]
+
+[ext_resource type="Script" path="res://interface/scripts/containers/truck_container.gd" id="1_jxuf2"]
+
+[node name="TruckContainer" type="Control" node_paths=PackedStringArray("_truck_container", "_list_container", "_total") groups=["truck_container"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jxuf2")
+_truck_container = NodePath("HContainer/AvailableIngredients/VContainer/Container/VContainer")
+_list_container = NodePath("HContainer/List/VContainer/Container/VContainer")
+_total = NodePath("HContainer/List/VContainer/Price")
+
+[node name="HContainer" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(1160, 640)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -580.0
+offset_top = -320.0
+offset_right = 580.0
+offset_bottom = 320.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 200
+alignment = 1
+
+[node name="AvailableIngredients" type="ColorRect" parent="HContainer"]
+custom_minimum_size = Vector2(480, 640)
+layout_mode = 2
+color = Color(0.2, 0.2, 0.4, 0.8)
+
+[node name="VContainer" type="VBoxContainer" parent="HContainer/AvailableIngredients"]
+custom_minimum_size = Vector2(440, 600)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -300.0
+offset_right = 220.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="HContainer/AvailableIngredients/VContainer"]
+layout_mode = 2
+text = "AVAILABLE INGREDIENTS"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="Container" type="ScrollContainer" parent="HContainer/AvailableIngredients/VContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VContainer" type="VBoxContainer" parent="HContainer/AvailableIngredients/VContainer/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="List" type="ColorRect" parent="HContainer"]
+custom_minimum_size = Vector2(480, 640)
+layout_mode = 2
+color = Color(0.2, 0.2, 0.4, 0.8)
+
+[node name="VContainer" type="VBoxContainer" parent="HContainer/List"]
+custom_minimum_size = Vector2(440, 600)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -300.0
+offset_right = 220.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="HContainer/List/VContainer"]
+layout_mode = 2
+text = "LIST"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="Container" type="ScrollContainer" parent="HContainer/List/VContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VContainer" type="VBoxContainer" parent="HContainer/List/VContainer/Container"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Price" type="Label" parent="HContainer/List/VContainer"]
+layout_mode = 2
+text = "PRICE - $0.00"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="ButtonContainer" type="HBoxContainer" parent="HContainer/List/VContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Button" type="Button" parent="HContainer/List/VContainer/ButtonContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "BUY!"
+
+[connection signal="pressed" from="HContainer/List/VContainer/ButtonContainer/Button" to="." method="_on_buy_button_pressed"]

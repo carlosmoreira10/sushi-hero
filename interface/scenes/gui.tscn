@@ -1,0 +1,87 @@
+[gd_scene load_steps=10 format=3 uid="uid://cdfqepyf75cnb"]
+
+[ext_resource type="PackedScene" uid="uid://dy7okhm1wb84s" path="res://interface/scenes/settings_container.tscn" id="1_csycs"]
+[ext_resource type="PackedScene" uid="uid://2ikd0g4hmjga" path="res://interface/scenes/fps_container.tscn" id="2_hix02"]
+[ext_resource type="PackedScene" uid="uid://r45gshpfvy6m" path="res://interface/scenes/containers/fridge_container.tscn" id="3_pvaj2"]
+[ext_resource type="Script" path="res://interface/scripts/environment_container.gd" id="3_wos2s"]
+[ext_resource type="PackedScene" uid="uid://cms81rfr3ok5s" path="res://interface/scenes/containers/oven_container.tscn" id="4_uuikm"]
+[ext_resource type="PackedScene" uid="uid://n5qmw68flhec" path="res://interface/scenes/containers/cutting_container.tscn" id="5_sqh0q"]
+[ext_resource type="PackedScene" uid="uid://01kosr7nsidm" path="res://interface/scenes/containers/recipes_background.tscn" id="6_xi5md"]
+[ext_resource type="PackedScene" uid="uid://c2nf87mytaeh4" path="res://interface/scenes/containers/truck_container.tscn" id="7_36p35"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ij7uj"]
+font_size = 24
+
+[node name="Gui" type="CanvasLayer"]
+process_mode = 3
+
+[node name="SettingsContainer" parent="." node_paths=PackedStringArray("_fps") instance=ExtResource("1_csycs")]
+visible = false
+_fps = NodePath("../FpsContainer")
+
+[node name="FpsContainer" parent="." instance=ExtResource("2_hix02")]
+visible = false
+
+[node name="EnvironmentContainer" type="ColorRect" parent="." node_paths=PackedStringArray("_money_label", "_reputation_label") groups=["environment"]]
+custom_minimum_size = Vector2(1280, 40)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -640.0
+offset_right = 640.0
+offset_bottom = 40.0
+grow_horizontal = 2
+color = Color(0, 0, 0, 0.6)
+script = ExtResource("3_wos2s")
+_money_label = NodePath("Money")
+_reputation_label = NodePath("Reputation")
+
+[node name="Money" type="Label" parent="EnvironmentContainer"]
+custom_minimum_size = Vector2(102, 37)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -122.0
+offset_top = -18.5
+offset_right = -20.0
+offset_bottom = 18.5
+grow_horizontal = 0
+grow_vertical = 2
+text = "$ 999"
+label_settings = SubResource("LabelSettings_ij7uj")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Reputation" type="Label" parent="EnvironmentContainer"]
+custom_minimum_size = Vector2(102, 37)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 20.0
+offset_top = -18.5
+offset_right = 210.0
+offset_bottom = 18.5
+grow_vertical = 2
+text = "Reputation - 999"
+label_settings = SubResource("LabelSettings_ij7uj")
+vertical_alignment = 1
+
+[node name="FridgeContainer" parent="." instance=ExtResource("3_pvaj2")]
+visible = false
+_amount = 20
+
+[node name="OvenContainer" parent="." instance=ExtResource("4_uuikm")]
+visible = false
+
+[node name="CuttingContainer" parent="." instance=ExtResource("5_sqh0q")]
+visible = false
+
+[node name="RecipesBackground" parent="." instance=ExtResource("6_xi5md")]
+visible = false
+
+[node name="TruckContainer" parent="." instance=ExtResource("7_36p35")]
+visible = false

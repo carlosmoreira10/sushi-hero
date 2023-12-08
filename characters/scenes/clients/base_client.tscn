@@ -1,0 +1,118 @@
+[gd_scene load_steps=11 format=3 uid="uid://c32s5uxoqa6ei"]
+
+[ext_resource type="Texture2D" uid="uid://clik66rmwjq47" path="res://foods/assets/dango.png" id="1_4uct7"]
+[ext_resource type="Script" path="res://characters/scripts/base_client.gd" id="1_8d7rc"]
+[ext_resource type="Script" path="res://characters/scripts/client_body.gd" id="2_07tlg"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xrxrk"]
+radius = 1.0
+height = 3.604
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_k1vgn"]
+radius = 6.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_vyvbn"]
+height = 0.1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jknmp"]
+shading_mode = 0
+albedo_color = Color(0.298039, 0.298039, 0.298039, 1)
+
+[sub_resource type="Animation" id="Animation_kb4f7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1.5708, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_gngyo"]
+resource_name = "rotatio"
+length = 4.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(1.5708, 0, 0), Vector3(1.5708, 6.28319, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fq4yb"]
+_data = {
+"RESET": SubResource("Animation_kb4f7"),
+"rotatio": SubResource("Animation_gngyo")
+}
+
+[node name="BaseClient" type="CharacterBody3D" node_paths=PackedStringArray("_armature", "_client_feedback", "_navigation_agent", "_eat_timer", "_wait_timer")]
+script = ExtResource("1_8d7rc")
+_armature = NodePath("Body")
+_client_feedback = NodePath("ClientFeedback")
+_navigation_agent = NodePath("NavigationAgent")
+_eat_timer = NodePath("EatTimer")
+_wait_timer = NodePath("WaitTimer")
+
+[node name="Body" type="Node3D" parent="." node_paths=PackedStringArray("_client")]
+script = ExtResource("2_07tlg")
+_client = NodePath("..")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.51626, 0)
+shape = SubResource("CapsuleShape3D_xrxrk")
+
+[node name="NavigationAgent" type="NavigationAgent3D" parent="."]
+avoidance_enabled = true
+
+[node name="InteractableArea" type="Area3D" parent="."]
+
+[node name="Collision" type="CollisionShape3D" parent="InteractableArea"]
+shape = SubResource("SphereShape3D_k1vgn")
+
+[node name="ClientFeedback" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -3.61999e-06, -1, 0, 1, -3.61999e-06, 0, 5, 0)
+visible = false
+mesh = SubResource("CylinderMesh_vyvbn")
+surface_material_override/0 = SubResource("StandardMaterial3D_jknmp")
+
+[node name="Front" type="Sprite3D" parent="ClientFeedback"]
+transform = Transform3D(0.08, 0, 0, 0, -3.49691e-09, -0.08, 0, 0.08, -3.49691e-09, 0, 0.0547014, -2.39107e-09)
+flip_v = true
+texture = ExtResource("1_4uct7")
+
+[node name="Back" type="Sprite3D" parent="ClientFeedback"]
+transform = Transform3D(0.08, 0, 0, 0, -3.49691e-09, -0.08, 0, 0.08, -3.49691e-09, 0, -0.0602594, 2.63402e-09)
+flip_h = true
+flip_v = true
+texture = ExtResource("1_4uct7")
+
+[node name="Animation" type="AnimationPlayer" parent="ClientFeedback"]
+autoplay = "rotatio"
+libraries = {
+"": SubResource("AnimationLibrary_fq4yb")
+}
+
+[node name="EatTimer" type="Timer" parent="."]
+wait_time = 5.334
+one_shot = true
+
+[node name="WaitTimer" type="Timer" parent="."]
+wait_time = 120.0
+one_shot = true
+
+[connection signal="velocity_computed" from="NavigationAgent" to="." method="_on_navigation_agent_velocity_computed"]
+[connection signal="body_entered" from="InteractableArea" to="." method="_on_interactable_area_body_entered"]
+[connection signal="body_exited" from="InteractableArea" to="." method="_on_interactable_area_body_exited"]
+[connection signal="timeout" from="EatTimer" to="Body" method="_on_eat_timer_timeout"]
+[connection signal="timeout" from="WaitTimer" to="." method="_on_wait_timer_timeout"]
